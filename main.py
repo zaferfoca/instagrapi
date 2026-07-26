@@ -34,7 +34,10 @@ try:
         else:
             print("Oturum bilgisi bulunamadı!")
 except Exception as e:
-    print(f"Giriş sırasında hata oluştu: {e}")
+        error_msg = str(e)
+        if "login_required" in error_msg:
+            raise HTTPException(status_code=400, detail="Bu içerik yaş kısıtlı veya hassas olduğu için Instagram giriş izni vermiyor.")
+        raise HTTPException(status_code=400, detail=error_msg)
 
 @app.get("/")
 def home():
