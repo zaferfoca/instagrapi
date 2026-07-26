@@ -16,8 +16,6 @@ app.add_middleware(
 )
 
 cl = Client()
-
-# Cihaz bilgilerini taklit etme ayarı
 cl.set_device({
     "app_version": "269.0.0.18.75",
     "android_version": 26,
