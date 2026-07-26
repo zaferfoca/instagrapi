@@ -16,17 +16,6 @@ app.add_middleware(
 )
 
 cl = Client()
-cl.set_device({
-    "app_version": "269.0.0.18.75",
-    "android_version": 26,
-    "android_release": "8.0.0",
-    "dpi": "480dpi",
-    "resolution": "1080x1920",
-    "manufacturer": "Samsung",
-    "device": "SM-G930F",
-    "model": "herolte",
-    "cpu": "samsungex8890"
-})
 cl.set_proxy("http://akpmsmsn:a1wjf22l4ri6@31.59.20.176:6754")
 SESSION_FILE = "session.json"
 
@@ -46,10 +35,10 @@ try:
         else:
             print("Oturum bilgisi bulunamadı!")
 except Exception as e:
-        error_msg = str(e)
-        if "login_required" in error_msg:
-            raise HTTPException(status_code=400, detail="Bu içerik yaş kısıtlı veya hassas olduğu için Instagram giriş izni vermiyor.")
-        raise HTTPException(status_code=400, detail=error_msg)
+    error_msg = str(e)
+    if "login_required" in error_msg:
+        raise HTTPException(status_code=400, detail="Bu içerik yaş kısıtlı veya hassas olduğu için Instagram giriş izni vermiyor.")
+    raise HTTPException(status_code=400, detail=error_msg)
 
 @app.get("/")
 def home():
