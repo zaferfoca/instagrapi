@@ -7,6 +7,7 @@ import os
 
 app = FastAPI()
 
+# CORS Ayarları
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,24 +17,29 @@ app.add_middleware(
 )
 
 cl = Client()
+SESSION_FILE = "session.json"
 
-# Instagram Oturum Açma (Login) İşlemi
-# Render panelindeki Environment kısmından INSTA_USER ve INSTA_PASS tanımlamalısınız.
-USERNAME = os.getenv("INSTA_USER", "bahisanaliztip")
-PASSWORD = os.getenv("INSTA_PASS", "Zago1987")
-
+# Instagram Oturum Yönetimi (Session Öncelikli)
 try:
-    if USERNAME and PASSWORD:
-        cl.login(USERNAME, PASSWORD)
-        print("Instagram oturumu başarıyla açıldı!")
+    if os.path.exists(SESSION_FILE):
+        cl.load_settings(SESSION_FILE)
+        print("session.json dosyası başarıyla yüklendi, oturum açık!")
     else:
-        print("Uyarı: Instagram kullanıcı adı veya şifre bulunamadı!")
+        # Yedek olarak şifre ile giriş denemesi
+        USERNAME = os.getenv("INSTA_USER", "bahisanaliztip")
+        PASSWORD = os.getenv("INSTA_PASS", "Zago1987")
+        if USERNAME and PASSWORD:
+            cl.login(USERNAME, PASSWORD)
+            cl.dump_settings(SESSION_FILE)
+            print("Kullanıcı adı ve şifre ile giriş yapıldı, session kaydedildi!")
+        else:
+            print("Hata: Ne session.json dosyası ne de giriş bilgileri bulunamadı!")
 except Exception as e:
     print(f"Instagram giriş hatası: {e}")
 
 @app.get("/")
 def home():
-    return {"status": "ok", "message": "Instagram API Çalışıyor ve Giriş Yapıldı!"}
+    return {"status": "ok", "message": "Instagram API Aktif ve Çalışıyor!"}
 
 @app.get("/api/download")
 def download_media(url: str):
@@ -65,13 +71,13 @@ def download_media(url: str):
                 thumbnail_url = download_url
                 media_type = "image"
 
-        # Tekli Video / Reels / Story (Video içerenler)
+        # Tekli Video / Reels / Story
         elif media_info.media_type == 2 or media_info.video_url:
             download_url = str(media_info.video_url)
             thumbnail_url = str(media_info.thumbnail_url) if media_info.thumbnail_url else ""
             media_type = "video"
 
-        # Tekli Fotoğraf / Story (Fotoğraf olanlar)
+        # Tekli Fotoğraf / Story (Fotoğraf)
         else:
             download_url = str(media_info.thumbnail_url)
             thumbnail_url = download_url
