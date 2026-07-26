@@ -16,6 +16,20 @@ app.add_middleware(
 )
 
 cl = Client()
+
+# Cihaz bilgilerini taklit etme ayarı
+cl.set_device({
+    "app_version": "269.0.0.18.75",
+    "android_version": 26,
+    "android_release": "8.0.0",
+    "dpi": "480dpi",
+    "resolution": "1080x1920",
+    "manufacturer": "Samsung",
+    "device": "SM-G930F",
+    "model": "herolte",
+    "cpu": "samsungex8890"
+})
+
 SESSION_FILE = "session.json"
 
 try:
