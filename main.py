@@ -7,7 +7,6 @@ import os
 
 app = FastAPI()
 
-# CORS Ayarları
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,23 +18,23 @@ app.add_middleware(
 cl = Client()
 SESSION_FILE = "session.json"
 
-# Instagram Oturum Yönetimi (Session Öncelikli)
 try:
     if os.path.exists(SESSION_FILE):
+        # Kayıtlı oturumu yükle
         cl.load_settings(SESSION_FILE)
-        print("session.json dosyası başarıyla yüklendi, oturum açık!")
+        print("session.json başarıyla yüklendi.")
     else:
-        # Yedek olarak şifre ile giriş denemesi
+        # Session yoksa şifreyle girmeyi dene ve kaydet
         USERNAME = os.getenv("INSTA_USER", "bahisanaliztip")
         PASSWORD = os.getenv("INSTA_PASS", "Zago1987")
         if USERNAME and PASSWORD:
             cl.login(USERNAME, PASSWORD)
             cl.dump_settings(SESSION_FILE)
-            print("Kullanıcı adı ve şifre ile giriş yapıldı, session kaydedildi!")
+            print("Şifre ile giriş yapıldı ve session kaydedildi.")
         else:
-            print("Hata: Ne session.json dosyası ne de giriş bilgileri bulunamadı!")
+            print("Oturum bilgisi bulunamadı!")
 except Exception as e:
-    print(f"Instagram giriş hatası: {e}")
+    print(f"Giriş sırasında hata oluştu: {e}")
 
 @app.get("/")
 def home():
