@@ -19,8 +19,8 @@ cl = Client()
 
 # Instagram Oturum Açma (Login) İşlemi
 # Render panelindeki Environment kısmından INSTA_USER ve INSTA_PASS tanımlamalısınız.
-USERNAME = os.getenv("INSTA_USER", "kullanici_adin")
-PASSWORD = os.getenv("INSTA_PASS", "sifren")
+USERNAME = os.getenv("INSTA_USER", "bahisanaliztip")
+PASSWORD = os.getenv("INSTA_PASS", "Zago1987")
 
 try:
     if USERNAME and PASSWORD:
