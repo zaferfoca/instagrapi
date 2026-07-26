@@ -29,7 +29,7 @@ cl.set_device({
     "model": "herolte",
     "cpu": "samsungex8890"
 })
-
+cl.set_proxy("http://akpmsmsn:a1wjf22l4ri6@31.59.20.176:6754")
 SESSION_FILE = "session.json"
 
 try:
